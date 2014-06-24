@@ -6,7 +6,7 @@
 #include <string>
 
 template <class T>
-void dump_to_file( const T & protobuf, const std::string file_name )
+void dump_to_file( const T & protobuf, const std::string & file_name )
 {
   assert( file_name != "" );
   char of[ 128 ];
@@ -26,6 +26,31 @@ void dump_to_file( const T & protobuf, const std::string file_name )
     perror( "close" );
     exit( 1 );
   }
+}
+
+template <class T>
+T parse_from_file( const std::string & file_name )
+{
+  assert( file_name != "" );
+  int fd = open( file_name.c_str(), O_RDONLY );
+  if ( fd < 0 ) {
+    perror( "open" );
+    exit( 1 );
+  }
+
+  T protobuf;;
+  if ( not protobuf.ParseFromFileDescriptor( fd ) ) {
+    fprintf( stderr, "Could not parse %s.\n", file_name.c_str() );
+    exit( 1 );
+  }
+
+  if ( close( fd ) < 0 ) {
+    perror( "close" );
+    exit( 1 );
+  }
+
+
+  return protobuf;
 }
 
 #endif // UTIL_HH
