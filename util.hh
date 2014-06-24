@@ -11,10 +11,10 @@ void dump_to_file( const T & protobuf, const std::string & file_name )
   assert( file_name != "" );
   char of[ 128 ];
   snprintf( of, 128, "%s", file_name.c_str() );
-  fprintf( stderr, "Writing to \"%s\"... ", of );
+  fprintf( stderr, "Writing to \"%s\"... \n", of );
   int fd = open( of, O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR );
   if ( fd < 0 ) {
-    perror( "open" );
+    perror( ( "open " + file_name ).c_str() );
     exit( 1 );
   }
   if ( not protobuf.SerializeToFileDescriptor( fd ) ) {
@@ -34,7 +34,7 @@ T parse_from_file( const std::string & file_name )
   assert( file_name != "" );
   int fd = open( file_name.c_str(), O_RDONLY );
   if ( fd < 0 ) {
-    perror( "open" );
+    perror( ( "open " + file_name ).c_str() );
     exit( 1 );
   }
 
