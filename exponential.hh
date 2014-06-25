@@ -16,6 +16,8 @@ public:
   Exponential( const double & rate, PRNG & s_prng ) : distribution( rate ), prng( s_prng ) {}
   
   double sample( void ) { return distribution( prng ); }
+
+  double get_mean( void ) const { return 1.0 / distribution.lambda() ; }
 };
 
 #endif
