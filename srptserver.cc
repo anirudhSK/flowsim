@@ -32,12 +32,19 @@ void SrptServer::accept( const Flow & s_flow, const double & tickno )
     /* Update remaining flow size on head */
     const double rem_flow_size = head_flow.get_remaining_flow_size() -
                            ( ( tickno - head_flow.get_begin_service() ) * _link_speed  );
-    assert( rem_flow_size > 0.0 );
+//    assert( rem_flow_size >= 0.0 );
     assert( rem_flow_size <= head_flow.get_remaining_flow_size() );
 
     /* Now we have a smaller flow, in case it gets prempted by s_flow */
-    _flow_queue.front().set_remaining_flow_size( rem_flow_size );
-    _flow_queue.front().set_begin_service( tickno );
+    if ( rem_flow_size > 0 ) {
+      _flow_queue.front().set_remaining_flow_size( rem_flow_size );
+      _flow_queue.front().set_begin_service( tickno );
+    } else {
+      _fcts.push_back( tickno - head_flow.get_creation_time() );
+      _fct_sum += ( tickno - head_flow.get_creation_time() );
+      std::pop_heap( _flow_queue.begin(), _flow_queue.end(), Flow::greater_than );
+      _flow_queue.pop_back();
+    }
 
     /* Insert  s_flow treating it as a heap */
     _flow_queue.push_back( s_flow );
