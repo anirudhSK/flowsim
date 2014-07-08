@@ -16,6 +16,7 @@ public:
   template <class NextHop>
   void tick( NextHop & next, const double & tickno );
   double next_event_time( const double & tickno __attribute__ ((unused)) ) const { return _next_flow_start; }
+  unsigned int flow_count( void ) const { return _flow_count; }
 };
 
 #endif  // FLOWGENERATOR_HH

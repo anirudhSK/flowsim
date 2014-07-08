@@ -47,4 +47,5 @@ int main( int argc, const char* argv[] )
     }
     fcfs_server.output_stats( quantile );
   }
+  cout << " Scheduled a total of " << flow_generator.flow_count() << " flows " << endl;
 }
