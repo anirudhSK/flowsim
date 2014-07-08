@@ -26,14 +26,14 @@ void SrptServer::accept( const Flow & s_flow, const double & tickno )
     /* somebody should have set the service time for this flow */
     assert( head_flow.get_begin_service() > 0 );
 
-    /* current tickno should be larger than get_begin_service() */
-    assert( tickno > head_flow.get_begin_service() );
+    /* current tickno should be at least as large as get_begin_service() */
+    assert( tickno >= head_flow.get_begin_service() );
 
     /* Update remaining flow size on head */
     const double rem_flow_size = head_flow.get_remaining_flow_size() -
                            ( ( tickno - head_flow.get_begin_service() ) * _link_speed  );
     assert( rem_flow_size > 0.0 );
-    assert( rem_flow_size < head_flow.get_remaining_flow_size() );
+    assert( rem_flow_size <= head_flow.get_remaining_flow_size() );
 
     /* Now we have a smaller flow, in case it gets prempted by s_flow */
     _flow_queue.front().set_remaining_flow_size( rem_flow_size );
