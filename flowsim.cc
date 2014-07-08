@@ -27,6 +27,7 @@ int main( int argc, const char* argv[] )
   while ( tickno < total_ticks ) {
     tickno = min( flow_generator.next_event_time( tickno ),
                   flow_server.next_event_time( tickno ) );
+    assert( tickno > 0 );
     flow_generator.tick( flow_server, tickno );
     flow_server.tick( tickno );
   }

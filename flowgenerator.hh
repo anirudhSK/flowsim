@@ -8,8 +8,8 @@ class FlowGenerator
 {
 private:
   unsigned int _flow_count {0};
-  double _next_flow_start {0.0};
   Exponential _start_distribution, _stop_distribution;
+  double _next_flow_start;
 
 public:
   FlowGenerator( const double & mean_on_duration, const double & mean_off_duration, PRNG & s_prng );
