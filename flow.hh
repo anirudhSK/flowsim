@@ -4,9 +4,9 @@
 class Flow
 {
 private:
-  const unsigned int _flow_id;
+  unsigned int _flow_id;
   double _remaining_flow_size;
-  const double _creation_time;
+  double _creation_time;
   double _begin_service {-1};
 
 public:
@@ -17,10 +17,11 @@ public:
       _remaining_flow_size( s_flow_size ),
       _creation_time( s_created )
   {}
-  bool operator>( const Flow & other ) { return _remaining_flow_size > other._remaining_flow_size; }
+  static bool greater_than( const Flow & lhs, const Flow & rhs ) { return lhs._remaining_flow_size > rhs._remaining_flow_size; }
   void set_begin_service( const double & s_begin_service ) { _begin_service = s_begin_service; }
   double get_begin_service( void ) const { return _begin_service; }
   double get_remaining_flow_size( void ) const { return _remaining_flow_size; }
+  void set_remaining_flow_size( const double & s_flow_size ) { _remaining_flow_size = s_flow_size; }
   double get_creation_time( void ) const { return _creation_time; }
 };
 
