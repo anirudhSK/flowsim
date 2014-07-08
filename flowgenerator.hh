@@ -1,19 +1,8 @@
 #ifndef FLOWGENERATOR_HH
 #define FLOWGENERATOR_HH
 
+#include "flow.hh"
 #include "exponential.hh"
-
-class Flow
-{
-private:
-  unsigned int _flow_id;
-  double _remaining_flow_size;
-  double _scheduled_departure {-1.0};
-
-public:
-  Flow( const unsigned int s_flow_id, const double & s_flow_size );
-  void set_departure( const double & s_departure );
-};
 
 class FlowGenerator
 {
