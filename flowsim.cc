@@ -2,7 +2,7 @@
 #include <cstdlib>
 
 #include "random.hh"
-#include "flowserver.hh"
+#include "srptserver.hh"
 #include "flowgenerator.hh"
 #include "flowgenerator-templates.cc"
 
@@ -22,7 +22,7 @@ int main( int argc, const char* argv[] )
   const double quantile = stod( argv[ 5 ] );
 
   FlowGenerator flow_generator ( mean_on_duration, mean_off_duration, global_PRNG() );
-  FlowServer flow_server( link_speed );
+  SrptServer flow_server( link_speed );
   double tickno = 0;
   while ( tickno < total_ticks ) {
     tickno = min( flow_generator.next_event_time( tickno ),
