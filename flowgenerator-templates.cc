@@ -1,0 +1,14 @@
+#include <iostream>
+#include "flowgenerator.hh"
+
+template <class NextHop>
+void FlowGenerator::tick( NextHop & next __attribute__ ((unused)), const double & tickno )
+{
+  if ( _next_flow_start <= tickno ) {
+    assert( _next_flow_start == tickno );
+    unsigned int new_flow_length = lrint( ceil( _stop_distribution.sample() ) );
+    std::cout << "Generating flow of size " << new_flow_length << std::endl;
+//    next.accept( Flow( _flow_count++, new_flow_length ) );
+    _next_flow_start += _start_distribution.sample();
+  }
+}
