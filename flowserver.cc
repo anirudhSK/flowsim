@@ -9,11 +9,13 @@
 
 using namespace std;
 
-void FlowServer::accept( const Flow & s_flow )
+void FlowServer::accept( const Flow & s_flow, const double & tickno )
 {
-  double current_departure =  _flow_queue.empty() ? s_flow.get_creation_time() :  _flow_queue.back().get_departure();
   Flow new_flow( s_flow );
-  new_flow.set_departure( current_departure + new_flow.get_remaining_flow_size() / _link_speed );
+  if ( _flow_queue.empty() ) {
+    /* Set beginning of service to current time */
+    new_flow.set_begin_service( tickno );
+  }
   _flow_queue.emplace( new_flow );
 }
 
@@ -21,16 +23,20 @@ void FlowServer::tick( const double & tickno )
 {
   if ( next_event_time( tickno ) <= tickno ) {
     assert( not _flow_queue.empty() );
+    assert( tickno == next_event_time( tickno ) );
     auto completed_flow = _flow_queue.front();
-    assert( tickno == completed_flow.get_departure() );
     _fcts.push_back( tickno - completed_flow.get_creation_time() );
     _flow_queue.pop();
+    if ( not _flow_queue.empty() ) {
+      _flow_queue.front().set_begin_service( tickno );
+    }
   }
 }
 
 double FlowServer::next_event_time( const double & tickno __attribute__ ((unused)) ) const
 {
-  return _flow_queue.empty() ? numeric_limits<double>::max() :  _flow_queue.front().get_departure();
+  return _flow_queue.empty() ? numeric_limits<double>::max() : _flow_queue.front().get_begin_service()
+                                                             + _flow_queue.front().get_remaining_flow_size() / _link_speed ;
 }
 
 void FlowServer::output_stats( const double & quantile )

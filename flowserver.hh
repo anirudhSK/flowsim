@@ -15,7 +15,7 @@ public:
   FlowServer( const double & s_link_speed ) : _link_speed( s_link_speed ) {}
   void tick( const double & tickno );
   double next_event_time( const double & tickno ) const;
-  void accept( const Flow & s_flow );
+  void accept( const Flow & s_flow, const double & tickno );
   void output_stats( const double & quantile );
 };
 
