@@ -10,6 +10,7 @@ private:
   std::queue<Flow> _flow_queue {};
   double _link_speed;
   std::vector<double> _fcts {};
+  double _fct_sum { 0.0 };
 
 public:
   FlowServer( const double & s_link_speed ) : _link_speed( s_link_speed ) {}

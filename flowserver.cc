@@ -26,6 +26,7 @@ void FlowServer::tick( const double & tickno )
     assert( tickno == next_event_time( tickno ) );
     auto completed_flow = _flow_queue.front();
     _fcts.push_back( tickno - completed_flow.get_creation_time() );
+    _fct_sum += ( tickno - completed_flow.get_creation_time() );
     _flow_queue.pop();
     if ( not _flow_queue.empty() ) {
       _flow_queue.front().set_begin_service( tickno );
