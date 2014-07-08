@@ -11,16 +11,16 @@ using namespace std;
 
 int main( int argc, const char* argv[] )
 {
-  if ( argc < 5 ) {
-    cout << "Usage: ./flowsim lambda(0--1)  total_ticks (ms)  quantile (0--1) sch_type " << endl;
+  if ( argc < 4 ) {
+    cout << "Usage: ./flowsim lambda(0--1)  total_ticks (ms)  sch_type [ quantile (0--1) ] " << endl;
     exit( EXIT_SUCCESS );
   }
 
   const double lambda = stod( argv[ 1 ] );
   assert( lambda > 0 and lambda < 1 );
   const double total_ticks = stod( argv[ 2 ] );
-  const double quantile = stod( argv[ 3 ] );
-  const string sch_type ( argv[ 4 ] );
+  const string sch_type ( argv[ 3 ] );
+  const double quantile = ( argc >= 5 ) ? stod( argv[ 4 ] ) : 0.0;
 
   FlowGenerator flow_generator ( 1.0, 1.0 / lambda, global_PRNG() );
   if ( sch_type == "srpt" ) {
@@ -33,7 +33,7 @@ int main( int argc, const char* argv[] )
       flow_generator.tick( srpt_server,  tickno );
       srpt_server.tick( tickno );
     }
-    srpt_server.output_stats( quantile );
+    ( quantile != 0 ) ? srpt_server.output_stats( quantile ) : srpt_server.output_average();
   } else {
     FlowServer fcfs_server( 1.0 );
     double tickno = 0;
@@ -44,7 +44,7 @@ int main( int argc, const char* argv[] )
       flow_generator.tick( fcfs_server,  tickno );
       fcfs_server.tick( tickno );
     }
-    fcfs_server.output_stats( quantile );
+    ( quantile != 0 ) ? fcfs_server.output_stats( quantile ) : fcfs_server.output_average();
   }
   cout << " Scheduled a total of " << flow_generator.flow_count() << " flows " << endl;
 }

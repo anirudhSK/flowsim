@@ -51,3 +51,9 @@ void FlowServer::output_stats( const double & quantile )
   cout << " Total of " << _fcts.size() << " flows " << endl;
   cout << quantile << " quantile " <<  boost::accumulators::quantile( fct_acc, boost::accumulators::quantile_probability = quantile ) << endl;
 }
+
+void FlowServer::output_average()
+{
+  cout << " Total of " << _fcts.size() << " flows " << endl;
+  cout << " Avg FCT " << ( _fct_sum / _fcts.size() ) << endl;
+}

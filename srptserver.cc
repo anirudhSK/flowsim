@@ -87,4 +87,11 @@ void SrptServer::output_stats( const double & quantile __attribute__ ((unused)) 
                                       ( boost::accumulators::tag::tail<boost::accumulators::right>::cache_size = _fcts.size() );
   for_each( _fcts.begin(), _fcts.end(), [&] ( const double & val ) { fct_acc( val ); } );
   cout << " Total of " << _fcts.size() << " flows " << endl;
-  cout << quantile << " quantile " <<  boost::accumulators::quantile( fct_acc, boost::accumulators::quantile_probability = quantile ) << endl;}
+  cout << quantile << " quantile " <<  boost::accumulators::quantile( fct_acc, boost::accumulators::quantile_probability = quantile ) << endl;
+}
+
+void SrptServer::output_average()
+{
+  cout << " Total of " << _fcts.size() << " flows " << endl;
+  cout << " Avg FCT " << ( _fct_sum / _fcts.size() ) << endl;
+}

@@ -18,6 +18,7 @@ public:
   double next_event_time( const double & tickno ) const;
   void accept( const Flow & s_flow, const double & tickno );
   void output_stats( const double & quantile );
+  void output_average( void );
 };
 
 #endif  // FLOWSERVER_HH
