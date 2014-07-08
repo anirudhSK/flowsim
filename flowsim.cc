@@ -11,21 +11,20 @@ using namespace std;
 
 int main( int argc, const char* argv[] )
 {
-  if ( argc < 7 ) {
-    cout << "Usage: ./flowsim mean_on_duration (packets)  mean_off_duration (ms)  link_speed (packets/ms) total_ticks (ms)  quantile (0--1) sch_type " << endl;
+  if ( argc < 5 ) {
+    cout << "Usage: ./flowsim lambda(0--1)  total_ticks (ms)  quantile (0--1) sch_type " << endl;
     exit( EXIT_SUCCESS );
   }
 
-  const double mean_on_duration = stod( argv[ 1 ] );
-  const double mean_off_duration = stod( argv[ 2 ] );
-  const double link_speed = stod( argv[ 3 ] );
-  const double total_ticks = stod( argv[ 4 ] );
-  const double quantile = stod( argv[ 5 ] );
-  const string sch_type ( argv[ 6 ] );
+  const double lambda = stod( argv[ 1 ] );
+  assert( lambda > 0 and lambda < 1 );
+  const double total_ticks = stod( argv[ 2 ] );
+  const double quantile = stod( argv[ 3 ] );
+  const string sch_type ( argv[ 4 ] );
 
-  FlowGenerator flow_generator ( mean_on_duration, mean_off_duration, global_PRNG() );
+  FlowGenerator flow_generator ( 1.0, 1.0 / lambda, global_PRNG() );
   if ( sch_type == "srpt" ) {
-    SrptServer srpt_server( link_speed );
+    SrptServer srpt_server( 1.0 );
     double tickno = 0;
     while ( tickno < total_ticks ) {
       tickno = min( flow_generator.next_event_time( tickno ),
@@ -36,7 +35,7 @@ int main( int argc, const char* argv[] )
     }
     srpt_server.output_stats( quantile );
   } else {
-    FlowServer fcfs_server( link_speed );
+    FlowServer fcfs_server( 1.0 );
     double tickno = 0;
     while ( tickno < total_ticks ) {
       tickno = min( flow_generator.next_event_time( tickno ),
