@@ -4,6 +4,10 @@
 #include <iostream>
 #include <algorithm>
 
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
+#include <boost/accumulators/statistics/tail_quantile.hpp>
+
 #include "srptserver.hh"
 
 using namespace std;
@@ -69,6 +73,11 @@ double SrptServer::next_event_time( const double & tickno __attribute__ ((unused
 
 void SrptServer::output_stats( const double & quantile __attribute__ ((unused)) )
 {
-  cout << " Mean FCT " << _fct_sum / _fcts.size() << endl ;
-  //cout << quantile << " quantile " << " TODO, still need to implement " << endl;
-}
+  boost::accumulators::accumulator_set< double,
+                                        boost::accumulators::stats
+                                        <boost::accumulators::tag::tail_quantile
+                                        <boost::accumulators::right> > > fct_acc
+                                      ( boost::accumulators::tag::tail<boost::accumulators::right>::cache_size = _fcts.size() );
+  for_each( _fcts.begin(), _fcts.end(), [&] ( const double & val ) { fct_acc( val ); } );
+  cout << " Total of " << _fcts.size() << " flows " << endl;
+  cout << quantile << " quantile " <<  boost::accumulators::quantile( fct_acc, boost::accumulators::quantile_probability = quantile ) << endl;}
