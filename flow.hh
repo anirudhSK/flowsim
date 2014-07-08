@@ -18,7 +18,7 @@ public:
     : _flow_id( s_flow_id ),
       _remaining_flow_size( s_flow_size ),
       _creation_time( s_created )
-  { assert( _remaining_flow_size > 0 ); }
+  { assert( _remaining_flow_size >= 0 ); /* Decimal imprecisions might give you a flow of size 0 */ }
   static bool greater_than( const Flow & lhs, const Flow & rhs ) { return lhs._remaining_flow_size > rhs._remaining_flow_size; }
   void set_begin_service( const double & s_begin_service ) { _begin_service = s_begin_service; }
   double get_begin_service( void ) const { return _begin_service; }
