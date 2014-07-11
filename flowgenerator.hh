@@ -3,12 +3,14 @@
 
 #include "flow.hh"
 #include "exponential.hh"
+#include "pareto.hh"
 
 class FlowGenerator
 {
 private:
   unsigned int _flow_count {0};
-  Exponential _start_distribution, _stop_distribution;
+  Exponential _start_distribution;
+  Pareto _stop_distribution;
   double _next_flow_start;
 
 public:
