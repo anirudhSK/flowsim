@@ -3,9 +3,10 @@
 
 #include <boost/random/exponential_distribution.hpp>
 
+#include "distribution.hh"
 #include "random.hh"
 
-class Exponential
+class Exponential : public Distribution
 {
 private:
   boost::random::exponential_distribution<> distribution;
@@ -13,9 +14,9 @@ private:
   PRNG & prng;
 
 public:
-  Exponential( const double & rate, PRNG & s_prng ) : distribution( rate ), prng( s_prng ) {}
-  
-  double sample( void ) { return distribution( prng ); }
+  Exponential( const double & mean, PRNG & s_prng ) : distribution( 1.0 / mean ), prng( s_prng ) {}
+
+  double sample( void ) override { return distribution( prng ); }
 };
 
 #endif

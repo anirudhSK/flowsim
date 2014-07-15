@@ -5,7 +5,7 @@
 
 #include "random.hh"
 
-class Pareto
+class Pareto : public Distribution
 {
 private:
   boost::random::uniform_real_distribution<> distribution;
@@ -25,7 +25,7 @@ public:
      _shape( 2.0 ),
      _scale( mean / 2.0 ) {}
   
-  double sample( void ) { return _scale / pow( distribution( prng ), 1 / _shape ); }
+  double sample( void ) override { return _scale / pow( distribution( prng ), 1 / _shape ); }
 };
 
 #endif
