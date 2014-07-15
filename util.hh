@@ -4,11 +4,14 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string>
+#include <queue>
 #include <memory>
 #include "distribution.hh"
 #include "exponential.hh"
 #include "pareto.hh"
 #include "bimodal.hh"
+
+typedef std::priority_queue<std::tuple<int, double>> EventQueue;
 
 std::unique_ptr<Distribution> get_dist( const DistType & dist_type, const double & mean, PRNG & prng );
 
