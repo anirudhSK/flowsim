@@ -12,7 +12,7 @@ using namespace std;
 int main( int argc, const char* argv[] )
 {
   if ( argc < 7 ) {
-    cout << "Usage: ./flowsim mean_on_duration (packets)  mean_off_duration (ms)  link_speed (packets/ms) total_ticks (ms)  sch_type dist_type (pareto/exponential) [quantile (0 -- 1)] " << endl;
+    cout << "Usage: ./flowsim mean_on_duration (packets)  mean_off_duration (ms)  link_speed (packets/ms) total_ticks (ms)  sch_type dist_type (pareto/exponential/bimodal) [quantile (0 -- 1)] " << endl;
     exit( EXIT_SUCCESS );
   }
 
@@ -21,7 +21,9 @@ int main( int argc, const char* argv[] )
   const double link_speed = stod( argv[ 3 ] );
   const double total_ticks = stod( argv[ 4 ] );
   const string sch_type ( argv[ 5 ] );
-  const DistType dist_type ( string( argv[ 6 ] ) == "pareto" ? DistType::PARETO : DistType::EXPONENTIAL );
+  const DistType dist_type ( string( argv[ 6 ] ) == "pareto" ? DistType::PARETO
+                           : string( argv[ 6 ] ) == "exponential" ?  DistType::EXPONENTIAL
+                           : DistType::BIMODAL );
   const double quantile = ( argc >= 8 ) ? stod( argv[ 7 ] ) : 0.0;
 
   FlowGenerator flow_generator ( mean_on_duration, mean_off_duration, dist_type, global_PRNG() );

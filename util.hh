@@ -4,6 +4,13 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string>
+#include <memory>
+#include "distribution.hh"
+#include "exponential.hh"
+#include "pareto.hh"
+#include "bimodal.hh"
+
+std::unique_ptr<Distribution> get_dist( const DistType & dist_type, const double & mean, PRNG & prng );
 
 template <class T>
 void dump_to_file( const T & protobuf, const std::string & file_name )
