@@ -12,12 +12,15 @@ private:
 
   PRNG & prng;
 
-public:
-  BiModal( PRNG & s_prng )
-   : distribution( 0, 1.0 ),
-     prng( s_prng ) {}
+  double _threshold;
 
-  double sample( void ) override { return distribution( prng ) < 0.5 ? 1 : 1000; }
+public:
+  BiModal( const double & mean, PRNG & s_prng )
+   : distribution( 0, 1.0 ),
+     prng( s_prng ),
+     _threshold( mean / 1000.0 ) {}
+
+  double sample( void ) override { return distribution( prng ) < _threshold ? 1000.0 : 1.0; }
 };
 
 #endif  // BIMODAL_HH
