@@ -1,0 +1,4 @@
+Compile with:
+g++ --std=c++11 flowsim.cc flowserver.cc random.cc srptserver.cc flowgenerator.cc util.cc -o flowsim
+
+(Requires libboost-all-dev)
